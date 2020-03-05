@@ -1,0 +1,10 @@
+<!--<button nbButton class="languages-switcher" nbPopover="switcherListComponent" nbPopoverPlacement="bottom"-->
+<!--        [nbPopoverContext]="{popover: popover}">-->
+<!--  <i class="fa fa-globe"></i>-->
+<!--  <span *ngIf="showTitle" translate>Language</span>-->
+<!--</button>-->
+
+<button nbButton class="languages-switcher" [nbPopover]="switcherListComponent" nbPopoverPlacement="bottom"
+        [nbPopoverContext]="{popover: popover}">
+  <span *ngIf="showTitle" translate><i class="fa fa-globe"></i></span>
+</button>
