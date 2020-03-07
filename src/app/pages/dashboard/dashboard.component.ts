@@ -1,10 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NbThemeService} from '@nebular/theme';
-import {takeWhile} from 'rxjs/operators' ;
-import {HttpClient} from '@angular/common/http';
-import {SolarData} from '../../@core/data/solar';
-import {ApiService} from '../../@core/services/api.service';
-
+import {Component, OnDestroy} from '@angular/core';
+import { NbThemeService } from '@nebular/theme';
+import { takeWhile } from 'rxjs/operators' ;
+import { SolarData } from '../../@core/data/solar';
 
 interface CardSettings {
   title: string;
@@ -17,12 +14,40 @@ interface CardSettings {
   styleUrls: ['./dashboard.component.scss'],
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnDestroy {
 
   private alive = true;
 
-  commonStatusCardsSet: CardSettings[] = [];
+  solarValue: number;
+  lightCard: CardSettings = {
+    title: 'Light',
+    iconClass: 'nb-lightbulb',
+    type: 'primary',
+  };
+  rollerShadesCard: CardSettings = {
+    title: 'Roller Shades',
+    iconClass: 'nb-roller-shades',
+    type: 'success',
+  };
+  wirelessAudioCard: CardSettings = {
+    title: 'Wireless Audio',
+    iconClass: 'nb-audio',
+    type: 'info',
+  };
+  coffeeMakerCard: CardSettings = {
+    title: 'Coffee Maker',
+    iconClass: 'nb-coffee-maker',
+    type: 'warning',
+  };
+
   statusCards: string;
+
+  commonStatusCardsSet: CardSettings[] = [
+    this.lightCard,
+    this.rollerShadesCard,
+    this.wirelessAudioCard,
+    this.coffeeMakerCard,
+  ];
 
   statusCardsByThemes: {
     default: CardSettings[];
@@ -32,29 +57,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
   } = {
     default: this.commonStatusCardsSet,
     cosmic: this.commonStatusCardsSet,
-    corporate: this.commonStatusCardsSet,
+    corporate: [
+      {
+        ...this.lightCard,
+        type: 'warning',
+      },
+      {
+        ...this.rollerShadesCard,
+        type: 'primary',
+      },
+      {
+        ...this.wirelessAudioCard,
+        type: 'danger',
+      },
+      {
+        ...this.coffeeMakerCard,
+        type: 'info',
+      },
+    ],
     dark: this.commonStatusCardsSet,
   };
 
   constructor(private themeService: NbThemeService,
-              private api: ApiService,
-              private http: HttpClient) {
+              private solarService: SolarData) {
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
         this.statusCards = this.statusCardsByThemes[theme.name];
-      });
-  }
+    });
 
-  ngOnInit(): void {
-    this.api.getNoAuth('http://5e5cdd8597d2ea0014796dcf.mockapi.io/api/users')
-      .subscribe(
-        (res) => {
-          console.info(res);
-        },
-        err => {
-        },
-      );
+    this.solarService.getSolarData()
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((data) => {
+        this.solarValue = data;
+      });
   }
 
   ngOnDestroy() {

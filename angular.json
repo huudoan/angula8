@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cms-customer": {
+    "ngx-admin-demo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -76,18 +76,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cms-customer:build"
+            "browserTarget": "ngx-admin-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "cms-customer:build:production"
+              "browserTarget": "ngx-admin-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cms-customer:build"
+            "browserTarget": "ngx-admin-demo:build"
           }
         },
         "test": {
@@ -144,7 +144,7 @@
         }
       }
     },
-    "cms-customer-e2e": {
+    "ngx-admin-demo-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -153,7 +153,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "cms-customer:serve"
+            "devServerTarget": "ngx-admin-demo:serve"
           }
         },
         "lint": {
@@ -168,7 +168,7 @@
       }
     }
   },
-  "defaultProject": "cms-customer",
+  "defaultProject": "ngx-admin-demo",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",

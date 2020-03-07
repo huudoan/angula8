@@ -11,7 +11,7 @@ import {
   NbButtonModule,
   NbSelectModule,
   NbIconModule,
-  NbThemeModule, NbPopoverModule,
+  NbThemeModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
@@ -21,8 +21,6 @@ import {
   HeaderComponent,
   SearchInputComponent,
   TinyMCEComponent,
-  LangSwitcherComponent,
-  LangSwitcherListComponent,
 } from './components';
 import {
   CapitalizePipe,
@@ -40,10 +38,7 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
-import { TranslateModule } from '@ngx-translate/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule, TranslateModule];
 const NB_MODULES = [
   NbLayoutModule,
   NbMenuModule,
@@ -66,8 +61,6 @@ const COMPONENTS = [
   OneColumnLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
-  LangSwitcherComponent,
-  LangSwitcherListComponent,
 ];
 const PIPES = [
   CapitalizePipe,
@@ -77,15 +70,10 @@ const PIPES = [
   NumberWithCommasPipe,
 ];
 
-const ENTRY_COMPONENTS = [
-  LangSwitcherListComponent,
-];
-
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, NbPopoverModule],
-  exports: [...BASE_MODULES, ...PIPES, ...COMPONENTS],
+  imports: [CommonModule, ...NB_MODULES],
+  exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
-  entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {
   static forRoot(): ModuleWithProviders {
