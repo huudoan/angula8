@@ -1,10 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  NbMediaBreakpointsService,
+  NbMenuService,
+  NbPopoverDirective,
+  NbSidebarService,
+  NbThemeService,
+} from '@nebular/theme';
 
-import { UserData } from '../../../@core/data/users';
-import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import {UserData} from '../../../@core/data/users';
+import {LayoutService} from '../../../@core/utils';
+import {map, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {NbAuthService} from '@nebular/auth';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-header',
@@ -13,6 +21,7 @@ import { Subject } from 'rxjs';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  @Input() popover: NbPopoverDirective;
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
@@ -38,14 +47,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [{title: 'Profile'}, {title: 'Log out', link: '/auth/logout'}];
+
+  languages = [];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
               private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private translate: TranslateService) {
+    this.translate.use(this.translate.getBrowserLang());
+  }
+
+  useLanguage(language: string) {
+    this.translate.use(language);
   }
 
   ngOnInit() {
@@ -55,7 +72,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((users: any) => this.user = users.nick);
 
-    const { xl } = this.breakpointService.getBreakpointsMap();
+    const {xl} = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
         map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
@@ -65,11 +82,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.themeService.onThemeChange()
       .pipe(
-        map(({ name }) => name),
+        map(({name}) => name),
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+
   }
+
 
   ngOnDestroy() {
     this.destroy$.next();

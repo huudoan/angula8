@@ -2,10 +2,11 @@ import {NgModule} from '@angular/core';
 import {ThemeModule} from '../../@theme/theme.module';
 import {QuestionsComponent} from './questions.component';
 import {FormsModule} from '@angular/forms';
-import {WindowFormComponent} from './window-form.component';
+import {WindowFormComponent} from './window-form/window-form.component';
+import {AnswerComponent} from './answer/answer.component';
 import {
   NbActionsModule,
-  NbButtonModule,
+  NbButtonModule, NbInputModule,
   NbCardModule, NbIconModule, NbListModule,
   NbRadioModule, NbSelectModule,
   NbTabsetModule,
@@ -29,6 +30,7 @@ import {Ng2SmartTableModule} from 'ng2-smart-table';
     NbListModule,
     NbIconModule,
     NbButtonModule,
+    NbInputModule,
     NgxEchartsModule,
     Ng2SmartTableModule,
     NbWindowModule.forChild(),
@@ -36,9 +38,11 @@ import {Ng2SmartTableModule} from 'ng2-smart-table';
   declarations: [
     QuestionsComponent,
     WindowFormComponent,
+    AnswerComponent,
   ],
   entryComponents: [
     WindowFormComponent,
+    AnswerComponent,
   ],
   providers: [],
 })

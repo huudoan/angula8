@@ -1,9 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {NbThemeService, NbWindowService} from '@nebular/theme';
 import {takeWhile} from 'rxjs/operators' ;
 import {HttpClient} from '@angular/common/http';
 import {ApiService} from '../../@core/services/api.service';
-import { WindowFormComponent } from './window-form.component';
+import {WindowFormComponent} from './window-form/window-form.component';
+import {NotiService} from '../../@core/services/noti.service';
 
 interface CardSettings {
   title: string;
@@ -12,7 +14,7 @@ interface CardSettings {
 }
 
 @Component({
-  selector: 'ngx-dashboard',
+  selector: 'ngx-questions',
   styleUrls: ['./questions.component.scss'],
   templateUrl: './questions.component.html',
 })
@@ -23,7 +25,7 @@ export class QuestionsComponent implements OnInit, OnDestroy {
   statusCards: string;
   settings = {
     mode: 'external',
-    actions: { add: false, edit: true, delete: false, position: 'right'},
+    actions: {add: false, edit: true, delete: false, position: 'right'},
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
     },
@@ -35,11 +37,11 @@ export class QuestionsComponent implements OnInit, OnDestroy {
         title: 'ID',
         type: 'number',
       },
-      name: {
+      customerName: {
         title: 'Full name',
         type: 'string',
       },
-      avatar: {
+      question: {
         title: 'Avatar',
         type: 'string',
       },
@@ -63,11 +65,12 @@ export class QuestionsComponent implements OnInit, OnDestroy {
   };
 
 
-
   constructor(private themeService: NbThemeService
-              , private api: ApiService
-              , private windowService: NbWindowService
-              , private http: HttpClient) {
+    , private api: ApiService
+    , private windowService: NbWindowService
+    , private router: Router
+    , private http: HttpClient
+    , private noti: NotiService) {
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
@@ -76,16 +79,29 @@ export class QuestionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.api.getNoAuth('http://5e5cdd8597d2ea0014796dcf.mockapi.io/api/users')
+    this.api.get('/api/FcQuestion/all', {
+      registered: true,
+      skip: 0,
+      take: 15,
+    })
       .subscribe(
-        (res: Array<Object>) => {
-          this.source = res;
+        (res: any) => {
+          if (res.statusCode === 200) {
+            this.noti.success(res.message);
+            this.noti.info(res.message);
+            this.noti.error(res.message);
+          }
+          this.source = res.data;
         },
       );
   }
 
-  openWindowForm ($event) {
-    this.windowService.open(WindowFormComponent, { title: `Hỏi đáp chuyên gia`, context: $event.data});
+  showEdit($event) {
+    this.router.navigate(['/home/answer/' + $event.data.id]);
+  }
+
+  openWindowForm($event) {
+    this.windowService.open(WindowFormComponent, {title: `Hỏi đáp chuyên gia`, context: $event.data});
   }
 
   ngOnDestroy() {

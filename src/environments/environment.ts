@@ -10,4 +10,10 @@
 
 export const environment = {
   production: false,
+  apiUrl: 'http://192.168.100.27:5607',
+  defaultLanguage: 'vi',
+  supportedLanguages: [
+    'en',
+    'vi',
+  ],
 };

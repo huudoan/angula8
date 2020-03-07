@@ -1,0 +1,46 @@
+<style>
+  .action-edit {
+    font-size: 2rem!important;
+  }
+</style>
+<div class="row">
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>Câu hỏi khách hàng</nb-card-header>
+      <nb-card-body>
+        <article>
+          <h2>{{ question.question }}</h2>
+          <div *ngIf="answer.id > 0">
+            <i *ngIf="!editStatus" class="nb-edit float-right fa-medium action-edit" (click)="editAnswer(true)"></i>
+            <p>{{ answer.answer }}</p>
+          </div>
+        </article>
+        <div *ngIf="editStatus">
+        <form class="form" [formGroup]="editForm" (ngSubmit)="onSubmit()">
+          <input type="hidden" [(ngModel)]="answer.questionId" [ngModelOptions]="{standalone: true}" name="questionId"/>
+        <div class="full-name-inputs">
+          <textarea rows="5" [(ngModel)]="answer.answer" [ngModelOptions]="{standalone: true}" name="answer" nbInput fullWidth placeholder="Message"></textarea>
+        </div>
+        <button type="button" nbButton status="info" (click)="editAnswer(false)">Hủy</button>
+        <button type="submit" nbButton status="success">Trả lời</button>
+        </form>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>Câu trả lời chủ đề</nb-card-header>
+      <nb-card-body>
+        <div *ngFor="let item of lsQuestion">
+          <article>
+            <h2>{{ item.question }}</h2>
+            <p>{{ item.answer }}</p>
+          </article>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+

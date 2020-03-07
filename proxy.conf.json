@@ -1,6 +1,16 @@
-{
-  "/api": {
-    "target": "http://192.168.100.27:5607/",
+[
+  {
+    "context": [
+      "/api/auth"
+    ],
+    "target": "http://192.168.100.27:5607",
+    "secure": false
+  },
+  {
+    "context": [
+      "/api/**"
+    ],
+    "target": "http://192.168.100.251:5601",
     "secure": false
   }
-}
+]
